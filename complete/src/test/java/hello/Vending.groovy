@@ -17,7 +17,7 @@ class Vending extends Specification {
         im.getAllStock()[0] == 0
         and: "customer money is taken by the machine"
         machine.currentMoney() == 5
-        and:"customer money is transfered"
+        and:"customer money is transferred"
         machine.getTotalAmount() == 0
     }
 
