@@ -47,6 +47,12 @@ public class SoftMachine {
         } while (difference > 0);
     }
 
+    public double currentMoney(){
+        return(Coin.getNICKLE()* coinInventory.get(Coin.getNICKLE()))
+                + (Coin.getDIME()*coinInventory.get(Coin.getDIME()))
+                + (Coin.getQUARTER()*coinInventory.get(Coin.getQUARTER()));
+    }
+
 
     //DEALING WITH CUSTOMER COINS
     public double insertCoin(double coin) {
@@ -61,7 +67,9 @@ public class SoftMachine {
 
     public double getTotalAmount() {
         double result = 0.0;
-        result = Math.round((num_dime * Coin.getDIME() + num_nickle * Coin.getNICKLE() + num_quarter * Coin.getQUARTER()) * 100.00)/100.00;
+        result = Math.round((num_dime * Coin.getDIME()
+                + num_nickle * Coin.getNICKLE()
+                + num_quarter * Coin.getQUARTER()) * 100.00)/100.00;
         return result;
     }
 
@@ -89,7 +97,6 @@ public class SoftMachine {
 
 
 
-    // CUSTOMER COIN AMT GETTERS & SETTERS
     public void requestRestock() {
         try {
             String response = makeCall();
@@ -113,6 +120,7 @@ public class SoftMachine {
         return response;
     }
 
+    // CUSTOMER COIN AMT GETTERS & SETTERS
     public int getNum_nickle() {
         return num_nickle;
     }
