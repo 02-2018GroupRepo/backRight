@@ -1,15 +1,18 @@
 package hello;
 
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SoftMachine {
     private Map<Double, Integer> coinInventory;
     private String companyName;
+    private String machineId;
     private int num_nickle;
     private int num_dime;
     private int num_quarter;
-    private int temp;
 
     public SoftMachine() {
         coinInventory = new HashMap<>();
@@ -17,7 +20,6 @@ public class SoftMachine {
         coinInventory.put(Coin.getDIME(), 10);
         coinInventory.put(Coin.getQUARTER(), 10);
         reset();
-        temp = 0;
     }
 
     //DEALING WITH MACHINE MONEY
@@ -81,6 +83,24 @@ public class SoftMachine {
 
 
     // CUSTOMER COIN AMT GETTERS & SETTERS
+    public void requestRestock() {
+        try {
+            makeCall();
+        } catch (Exception e) {
+            System.out.println("Request for restock failed.");
+        }
+    }
+
+    private void makeCall() throws ResourceAccessException {
+        String transactionUrl = "http://192.168.88.123:8080/requestRestock";
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromUriString(transactionUrl).queryParam("id", machineId);
+
+        RestTemplate restTemplate = new RestTemplate();
+        String response = restTemplate.getForObject(builder.toUriString(), String.class);
+        System.out.println(response);
+    }
+
     public int getNum_nickle() {
         return num_nickle;
     }
