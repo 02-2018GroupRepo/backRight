@@ -1,15 +1,22 @@
 package hello;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SoftMachine {
+//    @Value("${url.path:localhost:3000/requestRestock}")
+//    private String transactionUrl;
+
     private Map<Double, Integer> coinInventory;
     private String companyName;
-    private String machineId;
+    private String machineId = "001";
     private int num_nickle;
     private int num_dime;
     private int num_quarter;
@@ -88,17 +95,21 @@ public class SoftMachine {
             String response = makeCall();
             System.out.println(response);
         } catch (Exception e) {
+            System.out.println(e);
             System.out.println("Request for restock failed.");
         }
     }
 
     private String makeCall() throws ResourceAccessException {
-        String transactionUrl = "http://192.168.88.123:8080/requestRestock";
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(transactionUrl).queryParam("id", machineId);
-
+        String transactionUrl = "http://192.168.88.83:3000/requestRestock?id=001";
+        System.out.println(transactionUrl);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(transactionUrl)
+                .queryParam("id", machineId);
         RestTemplate restTemplate = new RestTemplate();
+        System.out.println(builder.toString());
         String response = restTemplate.getForObject(builder.toUriString(), String.class);
+
+        System.out.println(response);
         return response;
     }
 
