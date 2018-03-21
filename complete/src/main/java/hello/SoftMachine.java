@@ -1,7 +1,10 @@
 package hello;
 
 public class SoftMachine {
+
     private String companyName;
+
+    public SoftMachine() {}
 
     public String getCompanyName() {
         return this.companyName;
