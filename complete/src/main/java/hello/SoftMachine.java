@@ -108,15 +108,10 @@ public class SoftMachine {
     }
 
     private String makeCall() throws ResourceAccessException {
-        String transactionUrl = "http://192.168.88.83:3000/requestRestock?id=001";
-        System.out.println(transactionUrl);
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(transactionUrl)
-                .queryParam("id", machineId);
+        String transactionUrl = "http://192.168.88.83:3000/requestRestock?id=" + machineId;
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(transactionUrl);
         RestTemplate restTemplate = new RestTemplate();
-        System.out.println(builder.toString());
         String response = restTemplate.getForObject(builder.toUriString(), String.class);
-
-        System.out.println(response);
         return response;
     }
 
