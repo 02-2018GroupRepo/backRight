@@ -85,20 +85,21 @@ public class SoftMachine {
     // CUSTOMER COIN AMT GETTERS & SETTERS
     public void requestRestock() {
         try {
-            makeCall();
+            String response = makeCall();
+            System.out.println(response);
         } catch (Exception e) {
             System.out.println("Request for restock failed.");
         }
     }
 
-    private void makeCall() throws ResourceAccessException {
+    private String makeCall() throws ResourceAccessException {
         String transactionUrl = "http://192.168.88.123:8080/requestRestock";
         UriComponentsBuilder builder = UriComponentsBuilder
                 .fromUriString(transactionUrl).queryParam("id", machineId);
 
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(builder.toUriString(), String.class);
-        System.out.println(response);
+        return response;
     }
 
     public int getNum_nickle() {
