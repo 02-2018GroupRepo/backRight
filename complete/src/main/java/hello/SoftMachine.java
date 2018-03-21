@@ -9,15 +9,37 @@ public class SoftMachine {
     private int num_nickle;
     private int num_dime;
     private int num_quarter;
+    private int temp;
 
     public SoftMachine() {
         coinInventory = new HashMap<>();
-        coinInventory.put(Coin.getNICKLE(), 0);
-        coinInventory.put(Coin.getDIME(), 0);
-        coinInventory.put(Coin.getQUARTER(), 0);
+        coinInventory.put(Coin.getNICKLE(), 10);
+        coinInventory.put(Coin.getDIME(), 10);
+        coinInventory.put(Coin.getQUARTER(), 10);
         reset();
+        temp = 0;
     }
 
+    //DEALING WITH MACHINE MONEY
+    public void returnMachineCoins(double difference) {
+        do {
+            if (difference % Coin.getQUARTER() == 0) {
+                coinInventory.put(Coin.getQUARTER(), coinInventory.get(Coin.getQUARTER()) - 1);
+                difference -= Coin.getQUARTER();
+            }
+            else if (difference % Coin.getDIME() == 0) {
+                coinInventory.put(Coin.getDIME(), coinInventory.get(Coin.getDIME()) - 1);
+                difference -= Coin.getDIME();
+            }
+            else if (difference % Coin.getNICKLE() == 0) {
+                coinInventory.put(Coin.getNICKLE(), coinInventory.get(Coin.getNICKLE()) - 1);
+                difference -= Coin.getNICKLE();
+            }
+        } while (difference > 0);
+    }
+
+
+    //DEALING WITH CUSTOMER COINS
     public double insertCoin(double coin) {
         if(isValidCoin(coin)) {
             coinInventory.put(coin, coinInventory.get(coin) + 1);
@@ -26,7 +48,6 @@ public class SoftMachine {
             if (coin == Coin.getNICKLE()) num_nickle++;
         }
         return coin;
-
     }
 
     public double getTotalAmount() {
@@ -50,15 +71,16 @@ public class SoftMachine {
         setNum_nickle(0);
         setNum_quarter(0);
     }
-    
-    public String getCompanyName() {
-        return this.companyName;
-    }
 
-    public void setCompanyName(BadCompany company) {
-        this.companyName = company.getCompanyName();
-    }
 
+    //GETTER & SETTER FOR MACHINE'S CO NAME
+    public String getCompanyName() { return this.companyName; }
+
+    public void setCompanyName(BadCompany company) { this.companyName = company.getCompanyName(); }
+
+
+
+    // CUSTOMER COIN AMT GETTERS & SETTERS
     public int getNum_nickle() {
         return num_nickle;
     }

@@ -23,7 +23,24 @@ public class InventoryManager {
         return new int[]{map.get("A1").size(),map.get("A2").size()};
     }
 
-    public void vend(String selection) {
-        //map.get(selection).peek()
+    public double getItemPrice(String selection) {
+        return (double)map.get(selection).peek();
+    }
+
+    public void vend(String selection,SoftMachine machine) {
+        if (map.get(selection).peek() == null || machine.getTotalAmount() < (double)map.get(selection).peek()) {
+            machine.reset();
+        }
+
+        else if (machine.getTotalAmount() == (double)map.get(selection).peek()) {
+            map.get(selection).remove();
+            machine.reset();
+        }
+
+        else if (machine.getTotalAmount() > (double)map.get(selection).peek()) {
+            machine.returnMachineCoins(machine.getTotalAmount()-(double)map.get(selection).peek());
+            map.get(selection).remove();
+            machine.reset();
+        }
     }
 }
