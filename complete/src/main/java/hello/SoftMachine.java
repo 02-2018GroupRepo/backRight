@@ -12,7 +12,7 @@ public class SoftMachine {
 //    private String transactionUrl;
     private Map<Double, Integer> coinInventory;
     private String companyName;
-    private String machineId = "001";
+    private String machineId;
     private String errorMsg = null;
     private int num_nickle;
     private int num_dime;
@@ -23,6 +23,15 @@ public class SoftMachine {
         coinInventory.put(Coin.getNICKLE(), 10);
         coinInventory.put(Coin.getDIME(), 10);
         coinInventory.put(Coin.getQUARTER(), 10);
+        reset();
+    }
+
+    public SoftMachine(String machineId) {
+        coinInventory = new HashMap<>();
+        coinInventory.put(Coin.getNICKLE(), 10);
+        coinInventory.put(Coin.getDIME(), 10);
+        coinInventory.put(Coin.getQUARTER(), 10);
+        setMachineId(machineId);
         reset();
     }
 
@@ -103,11 +112,20 @@ public class SoftMachine {
     }
 
     private String makeCall() throws ResourceAccessException {
-        String transactionUrl = "http://192.168.88.83:3000/requestRestock?id=" + machineId;
+        String transactionUrl = "http://192.168.88.83:3000/requestRestock?id=" + getMachineId();
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(transactionUrl);
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(builder.toUriString(), String.class);
         return response;
+    }
+
+    //GETTER & SETTER FOR MACHINE ID
+    public String getMachineId() {
+        return machineId;
+    }
+
+    public void setMachineId(String machineId) {
+        this.machineId = machineId;
     }
 
     //GETTER & SETTER FOR MACHINE'S CO NAME
