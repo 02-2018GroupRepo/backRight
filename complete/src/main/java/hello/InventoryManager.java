@@ -1,5 +1,7 @@
 package hello;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 import java.util.*;
 
 public class InventoryManager {
@@ -12,21 +14,11 @@ public class InventoryManager {
         map = new HashMap<>();
     }
 
-//    public int[] getAllStock() {
-//        int i = 0;
-//        int[] allStock = new int[map.size()];
-//        Iterator<Map.Entry<Integer, Queue>> map_iter = map.entrySet().iterator();
-//        while(map_iter.hasNext()) {
-//            Map.Entry<Integer, Queue> map_entry = map_iter.next();
-//            allStock[i] = map_entry.getValue().size();
-//            System.out.print(allStock[i] + " ");
-//        }
-//        System.out.println();
-//        return allStock;
-//    }
-
-    public double getItemPrice(int selection) {
-        return (double)map.get(selection).peek();
+    public String getItemInfo(int selection) {
+        ArrayDeque queue = (ArrayDeque) getMap().get(selection);
+        Product selectedProduct = (Product) queue.getFirst();
+        String productInfo = "Product: " + selectedProduct.getName() + " Price: " + selectedProduct.getRetailPrice();
+        return productInfo;
     }
 
     public void vend(int selection,SoftMachine machine) {
@@ -34,19 +26,15 @@ public class InventoryManager {
         if (currentComp.size() == 0) {
             System.out.println("Out of stock");
             machine.reset();
-        }
-
-        else if(machine.getTotalAmount() < currentComp.getFirst().getRetailPrice()) {
+        } else if(machine.getTotalAmount() < currentComp.getFirst().getRetailPrice()) {
             System.out.println(currentComp.getFirst() + " is not vended");
             machine.reset();
         }
-
         else if (machine.getTotalAmount() == currentComp.getFirst().getRetailPrice()) {
             System.out.println(currentComp.getFirst() + " is vended");
             currentComp.remove();
             machine.reset();
         }
-
         else if (machine.getTotalAmount() > currentComp.getFirst().getRetailPrice()) {
             machine.returnMachineCoins(machine.getTotalAmount() - currentComp.getFirst().getRetailPrice());
             System.out.println(currentComp.getFirst() + " is vended");
@@ -67,15 +55,11 @@ public class InventoryManager {
         }
         return productList;
     }
+
     public void checkForRestock(int selection, SoftMachine machine) {
         if (getMap().get(selection).size() <= 3) {
             machine.requestRestock();
         }
-//        for (int i = 0; i < getAllStock().length; i++) {
-//            if (getAllStock()[i] <= 3) {
-//                machine.requestRestock();
-//            }
-//        }
     }
 
     public HashMap<Integer, Queue> getMap() {
