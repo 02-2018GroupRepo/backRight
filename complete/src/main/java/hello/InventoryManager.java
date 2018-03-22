@@ -60,7 +60,6 @@ public class InventoryManager {
     public void checkForRestock(SoftMachine machine) {
         for (int i = 0; i < getAllStock().length; i++) {
             if (getAllStock()[i] <= 3) {
-                System.out.println(getAllStock()[i]);
                 machine.requestRestock();
             }
         }
