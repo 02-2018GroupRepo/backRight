@@ -14,7 +14,7 @@ class RequestRestockSpec extends Specification {
         then: "Make request restock call"
         machine.getErrorMsg() == null
     }
-    
+
     def "request restock failed"() {
         given: "A machine"
         SoftMachine machine = new SoftMachine();
