@@ -14,21 +14,15 @@ class RequestRestockSpec extends Specification {
         then: "Make request restock call"
         machine.getErrorMsg() == null
     }
-//        def "request restock"() {
-//            given: "A machine"
-//            SoftMachine machine = new SoftMachine();
-//            when: "Product is low"
-//            machine.requestRestock();
-//            then: "Send a request"
-//            1 * machine.requestRestock();
-//        }
-
-//    def "request restock failed"() {
-//        given: "A machine"
-//        SoftMachine machine = new SoftMachine();
-//        when: "Product is low"
-//        machine.requestRestock();
-//        then: "Send a request"
-//        0 * machine.requestRestock();
-//    }
+    
+    def "request restock failed"() {
+        given: "A machine"
+        SoftMachine machine = new SoftMachine();
+        and: "An inventory"
+        InventoryManager inventory = new InventoryManager();
+        when: "The inventory is 3 or less"
+        inventory.vend("A1", machine);
+        then: "Send a request"
+        machine.getErrorMsg() != null;
+    }
 }
