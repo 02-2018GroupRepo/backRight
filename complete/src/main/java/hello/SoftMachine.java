@@ -10,10 +10,10 @@ import java.util.Map;
 public class SoftMachine {
 //    @Value("${url.path:localhost:3000/requestRestock}")
 //    private String transactionUrl;
-
     private Map<Double, Integer> coinInventory;
     private String companyName;
     private String machineId = "001";
+    private String errorMsg = null;
     private int num_nickle;
     private int num_dime;
     private int num_quarter;
@@ -70,6 +70,10 @@ public class SoftMachine {
         return result;
     }
 
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
     public boolean isValidCoin(double coin) {
         boolean isValidCoin = false;
         if(coin == Coin.getNICKLE() || coin == Coin.getDIME() || coin == Coin.getQUARTER()) {
@@ -78,6 +82,7 @@ public class SoftMachine {
             System.out.println("[ERROR]: Invalid coin. " + coin + " is returned.");
         }
         return isValidCoin;
+
     }
 
     public void reset() {
@@ -91,8 +96,9 @@ public class SoftMachine {
             String response = makeCall();
             System.out.println(response);
         } catch (Exception e) {
-            System.out.println(e);
             System.out.println("Request for restock failed.");
+            errorMsg = e.toString();
+            System.out.println(errorMsg);
         }
     }
 

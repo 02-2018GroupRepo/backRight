@@ -44,6 +44,7 @@ public class InventoryManager {
             machine.returnMachineCoins(machine.getTotalAmount()-(double)map.get(selection).remove());
             machine.reset();
         }
+        checkForRestock(machine);
     }
 
     public ArrayList<Product> retrieveProducts() {
@@ -52,5 +53,14 @@ public class InventoryManager {
             System.out.println(productList.get(i).getName() + " " + productList.get(i).getRetailPrice());
         }
         return productList;
+    }
+
+    public void checkForRestock(SoftMachine machine) {
+        for (int i = 0; i < getAllStock().length; i++) {
+            if (getAllStock()[i] <= 3) {
+                System.out.println(getAllStock()[i]);
+                machine.requestRestock();
+            }
+        }
     }
 }
