@@ -15,6 +15,10 @@ class Vending extends Specification {
         im.vend("A1",machine)
         then: "product is vended"
         im.getAllStock()[0] == 0
+        and: "customer money is taken by the machine"
+        machine.currentMoney() == 5
+        and:"customer money is transferred"
+        machine.getTotalAmount() == 0
     }
 
     def "Product is in stock and dispensed with change" () {
@@ -31,6 +35,8 @@ class Vending extends Specification {
         inventoryManager.getAllStock()[0] == 0
         and: "change is returned"
         machine.getTotalAmount() == 0
+        and: "machine has customer money but returned due change"
+        machine.currentMoney() == 5
     }
 
     def "Product is not in stock"() {

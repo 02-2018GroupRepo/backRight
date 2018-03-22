@@ -17,7 +17,7 @@ public class InventoryManager {
         map = new HashMap<>();
         A1 = new LinkedList();
         A2 = new LinkedList();
-        A1.add(1d);
+        A1.add(1d); // Pretty sure this is the stub
         map.put("A1", A1);
         map.put("A2", A2);
     }
@@ -41,8 +41,7 @@ public class InventoryManager {
         }
 
         else if (machine.getTotalAmount() > (double)map.get(selection).peek()) {
-            machine.returnMachineCoins(machine.getTotalAmount()-(double)map.get(selection).peek());
-            map.get(selection).remove();
+            machine.returnMachineCoins(machine.getTotalAmount()-(double)map.get(selection).remove());
             machine.reset();
         }
     }
