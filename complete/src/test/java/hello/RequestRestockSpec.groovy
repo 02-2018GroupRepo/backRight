@@ -21,8 +21,9 @@ class RequestRestockSpec extends Specification {
         and: "An inventory"
         InventoryManager inventory = new InventoryManager();
         when: "The inventory is 3 or less"
-        inventory.vend("A1", machine);
-        then: "Send a request"
+        and: "The machine sends out a restock call"
+        inventory.vend("A1", machine)
+        then: "The request fails to be sent and receive error message"
         machine.getErrorMsg() != null;
     }
 }
