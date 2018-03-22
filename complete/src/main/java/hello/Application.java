@@ -10,8 +10,5 @@ public class Application {
 
         SpringApplication.run(Application.class, args);
 
-        SoftMachine machine = new SoftMachine();
-        machine.requestRestock();
-
     }
 }

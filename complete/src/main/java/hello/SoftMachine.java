@@ -3,13 +3,17 @@ package hello;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class SoftMachine {
+//    @Value("${url.path:localhost:3000/requestRestock}")
+//    private String transactionUrl;
+
     private Map<Double, Integer> coinInventory;
     private String companyName;
-    private String machineId;
+    private String machineId = "001";
     private int num_nickle;
     private int num_dime;
     private int num_quarter;
@@ -40,6 +44,12 @@ public class SoftMachine {
         } while (difference > 0);
     }
 
+    public double currentMoney(){
+        return(Coin.getNICKLE()* coinInventory.get(Coin.getNICKLE()))
+                + (Coin.getDIME()*coinInventory.get(Coin.getDIME()))
+                + (Coin.getQUARTER()*coinInventory.get(Coin.getQUARTER()));
+    }
+
 
     //DEALING WITH CUSTOMER COINS
     public double insertCoin(double coin) {
@@ -54,7 +64,9 @@ public class SoftMachine {
 
     public double getTotalAmount() {
         double result = 0.0;
-        result = Math.round((num_dime * Coin.getDIME() + num_nickle * Coin.getNICKLE() + num_quarter * Coin.getQUARTER()) * 100.00)/100.00;
+        result = Math.round((num_dime * Coin.getDIME()
+                + num_nickle * Coin.getNICKLE()
+                + num_quarter * Coin.getQUARTER()) * 100.00)/100.00;
         return result;
     }
 
@@ -74,33 +86,30 @@ public class SoftMachine {
         setNum_quarter(0);
     }
 
+    public void requestRestock() {
+        try {
+            String response = makeCall();
+            System.out.println(response);
+        } catch (Exception e) {
+            System.out.println(e);
+            System.out.println("Request for restock failed.");
+        }
+    }
+
+    private String makeCall() throws ResourceAccessException {
+        String transactionUrl = "http://192.168.88.83:3000/requestRestock?id=" + machineId;
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(transactionUrl);
+        RestTemplate restTemplate = new RestTemplate();
+        String response = restTemplate.getForObject(builder.toUriString(), String.class);
+        return response;
+    }
 
     //GETTER & SETTER FOR MACHINE'S CO NAME
     public String getCompanyName() { return this.companyName; }
 
     public void setCompanyName(BadCompany company) { this.companyName = company.getCompanyName(); }
 
-
-
     // CUSTOMER COIN AMT GETTERS & SETTERS
-    public void requestRestock() {
-        try {
-            makeCall();
-        } catch (Exception e) {
-            System.out.println("Request for restock failed.");
-        }
-    }
-
-    private void makeCall() throws ResourceAccessException {
-        String transactionUrl = "http://192.168.88.123:8080/requestRestock";
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(transactionUrl).queryParam("id", machineId);
-
-        RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(builder.toUriString(), String.class);
-        System.out.println(response);
-    }
-
     public int getNum_nickle() {
         return num_nickle;
     }

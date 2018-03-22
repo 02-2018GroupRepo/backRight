@@ -63,4 +63,15 @@ class Vending extends Specification {
         then: "cash is returned"
         machine.getTotalAmount() == 0
     }
+
+    def "retrieve products"() {
+        given: "An inventory manager and product API"
+        InventoryManager inventoryManager = new InventoryManager();
+        ArrayList<Product> temp = new ArrayList<>();
+        when: "Retrieves products from product API"
+        temp = inventoryManager.retrieveProducts();
+        then: "List of products is returned"
+        !temp.isEmpty();
+
+    }
 }

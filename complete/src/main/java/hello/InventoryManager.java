@@ -1,16 +1,19 @@
 package hello;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class InventoryManager {
 
+    private ArrayList<Product> productList;
     private HashMap<String,Queue> map;
     private Queue<Double> A1;
     private Queue<Double> A2;
 
     public InventoryManager() {
+        productList = new ArrayList<>();
         map = new HashMap<>();
         A1 = new LinkedList();
         A2 = new LinkedList();
@@ -42,5 +45,13 @@ public class InventoryManager {
             map.get(selection).remove();
             machine.reset();
         }
+    }
+
+    public ArrayList<Product> retrieveProducts() {
+        productList = ProductApi.retrieveProductList();
+        for(int i = 0; i < productList.size(); i++) {
+            System.out.println(productList.get(i).getName() + " " + productList.get(i).getRetailPrice());
+        }
+        return productList;
     }
 }
