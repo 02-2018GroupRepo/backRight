@@ -1,25 +1,22 @@
 package hello;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class InventoryManager {
 
     private ArrayList<Product> productList;
-    private HashMap<String,Queue> map;
-    private Queue<Double> A1;
-    private Queue<Double> A2;
+    private HashMap<Integer,Queue> map;
+//    private Queue<Product> A1;
+//    private Queue<Product> A2;
 
     public InventoryManager() {
         productList = new ArrayList<>();
         map = new HashMap<>();
-        A1 = new LinkedList();
-        A2 = new LinkedList();
-        A1.add(1d); // Pretty sure this is the stub
-        map.put("A1", A1);
-        map.put("A2", A2);
+//        A1 = new LinkedList();
+//        A2 = new LinkedList();
+//       // A1.add(P); // Pretty sure this is the stub
+//        map.put("A1", A1);
+//        map.put("A2", A2);
     }
 
     public int[] getAllStock() {
@@ -50,11 +47,16 @@ public class InventoryManager {
     public ArrayList<Product> retrieveProducts() {
         productList = ProductApi.retrieveProductList();
         for(int i = 0; i < productList.size(); i++) {
-            System.out.println(productList.get(i).getName() + " " + productList.get(i).getRetailPrice());
+            Queue<Product> currentQueue = new ArrayDeque<Product>();
+            for (int j = 0; j < 6; j++) {
+                currentQueue.add(productList.get(i));
+            }
+            map.put(i + 1, currentQueue);
+              System.out.println(productList.get(i).getName() + " " + productList.get(i).getRetailPrice());
         }
+        System.out.println(map.toString());
         return productList;
     }
-
     public void checkForRestock(SoftMachine machine) {
         for (int i = 0; i < getAllStock().length; i++) {
             if (getAllStock()[i] <= 3) {

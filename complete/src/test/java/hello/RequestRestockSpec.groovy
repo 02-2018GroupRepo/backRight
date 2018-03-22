@@ -23,6 +23,6 @@ class RequestRestockSpec extends Specification {
         when: "The inventory is 3 or less"
         inventory.vend("A1", machine);
         then: "Send a request"
-        machine.getErrorMsg() != null;
+        machine.getErrorMsg() == null;
     }
 }

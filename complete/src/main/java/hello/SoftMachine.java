@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SoftMachine {
-//    @Value("${url.path:localhost:3000/requestRestock}")
-//    private String transactionUrl;
+  // @Value("${url.path:localhost:3000/requestRestock}")
+ //  private String transactionUrl;
     private Map<Double, Integer> coinInventory;
     private String companyName;
     private String machineId = "001";
