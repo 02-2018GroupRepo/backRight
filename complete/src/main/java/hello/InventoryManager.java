@@ -12,36 +12,41 @@ public class InventoryManager {
     public InventoryManager() {
         productList = new ArrayList<>();
         map = new HashMap<>();
+        retrieveProducts();
     }
 
     public String getItemInfo(int selection) {
         ArrayDeque queue = (ArrayDeque) getMap().get(selection);
         Product selectedProduct = (Product) queue.getFirst();
         String productInfo = "Product: " + selectedProduct.getName() + " Price: " + selectedProduct.getRetailPrice();
+        System.out.println(productInfo);
         return productInfo;
     }
 
-    public void vend(int selection,SoftMachine machine) {
+    public String vend(int selection,SoftMachine machine) {
         ArrayDeque<Product> currentComp = (ArrayDeque)map.get(selection);
+        String message = null;
         if (currentComp.size() == 0) {
-            System.out.println("Out of stock");
+            message = "Out of stock";
             machine.reset();
         } else if(machine.getTotalAmount() < currentComp.getFirst().getRetailPrice()) {
-            System.out.println(currentComp.getFirst() + " is not vended");
+            message = "Product: " + currentComp.getFirst().getName() + " Price: " + currentComp.getFirst().getRetailPrice() + " is not vended";
             machine.reset();
         }
         else if (machine.getTotalAmount() == currentComp.getFirst().getRetailPrice()) {
-            System.out.println(currentComp.getFirst() + " is vended");
+            message = "Product: " + currentComp.getFirst().getName() + " Price: " + currentComp.getFirst().getRetailPrice() + " is vended";
             currentComp.remove();
             machine.reset();
         }
         else if (machine.getTotalAmount() > currentComp.getFirst().getRetailPrice()) {
-            machine.returnMachineCoins(machine.getTotalAmount() - currentComp.getFirst().getRetailPrice());
-            System.out.println(currentComp.getFirst() + " is vended");
+            message = "Product: " + currentComp.getFirst().getName() + " Price: " + currentComp.getFirst().getRetailPrice() + " is vended " +
+                    machine.returnMachineCoins(machine.getTotalAmount() - currentComp.getFirst().getRetailPrice());
             currentComp.remove();
             machine.reset();
         }
         checkForRestock(selection, machine);
+        System.out.println(message);
+        return message;
     }
 
     public ArrayList<Product> retrieveProducts() {

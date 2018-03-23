@@ -29,19 +29,23 @@ class Vending extends Specification {
         SoftMachine machine = new SoftMachine()
         InventoryManager inventoryManager = new InventoryManager()
         inventoryManager.retrieveProducts();
+        double difference;
         and: "customer cash has excess coins"
         for (int i = 0; i < 8; i++)
             machine.insertCoin(0.25);
         currentComp =  inventoryManager.getMap().get(1);
         machine.getTotalAmount() > currentComp.getFirst().getRetailPrice();
+        difference = machine.getTotalAmount() - currentComp.getFirst().getRetailPrice();
         when: "a selection is made"
-        inventoryManager.vend(1, machine)
+        inventoryManager.vend(29, machine)
         then: "product is dispensed"
-        inventoryManager.getMap().get(1).size() == 5
+        inventoryManager.getMap().get(29).size() == 5
         and: "change is returned"
+        machine.returnMachineCoins(difference).equals("Change 0.50 is returned: Quarter(2) Dime(0) Nickel(0)")
+        and: "set value that customer has inserted to 0"
         machine.getTotalAmount() == 0
         and: "machine has customer money but returned due change"
-        machine.currentMoney() == 5.5
+        machine.currentMoney() == 5.0
     }
 
     def "Product is not in stock"() {

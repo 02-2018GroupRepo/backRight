@@ -17,6 +17,7 @@ package hello;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,24 +32,40 @@ import org.springframework.test.web.servlet.MockMvc;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class GreetingControllerTests {
+public class MachineControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    public void noParamGreetingShouldReturnDefaultMessage() throws Exception {
+//    @Test
+//    public void noParamGreetingShouldReturnDefaultMessage() throws Exception {
+//
+//        this.mockMvc.perform(get("/greeting")).andDo(print()).andExpect(status().isOk())
+//                .andExpect(jsonPath("$.content").value("Hello, World!"));
+//    }
 
-        this.mockMvc.perform(get("/greeting")).andDo(print()).andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").value("Hello, World!"));
+    @Test
+    public void paramGetInfoShouldReturnItemInfo() throws Exception {
+
+        this.mockMvc.perform(get("/getItemInfo").param("id", "1"))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string("Product: Lays Potato Chips - Classic Price: 1.5"));
     }
 
     @Test
-    public void paramGreetingShouldReturnTailoredMessage() throws Exception {
+    public void paramInsertShouldReturnMsg() throws Exception {
 
-        this.mockMvc.perform(get("/greeting").param("name", "Spring Community"))
+        this.mockMvc.perform(get("/insertCoin").param("coin", "0.25"))
                 .andDo(print()).andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").value("Hello, Spring Community!"));
+                .andExpect(content().string("You inserts 0.25\nTotal amount you have inserted is 0.25"));
+    }
+
+    @Test
+    public void paramPurchaseProductShouldReturnMsg() throws Exception {
+
+        this.mockMvc.perform(get("/purchaseProduct").param("id", "1"))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string("Product: Lays Potato Chips - Classic Price: 1.5 is not vended"));
     }
 
 }

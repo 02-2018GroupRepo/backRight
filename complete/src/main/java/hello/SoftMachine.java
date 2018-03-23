@@ -10,7 +10,7 @@ import java.util.Map;
 public class SoftMachine {
   // @Value("${url.path:localhost:3000/requestRestock}")
  //  private String transactionUrl;
-    private Map<Double, Integer> coinInventory;
+    private Map<Double, Integer> coinInventory = new HashMap<>();
     private String companyName;
     private String machineId;
     private String errorMsg = null;
@@ -19,7 +19,6 @@ public class SoftMachine {
     private int num_quarter;
 
     public SoftMachine() {
-        coinInventory = new HashMap<>();
         coinInventory.put(Coin.getNICKLE(), 10);
         coinInventory.put(Coin.getDIME(), 10);
         coinInventory.put(Coin.getQUARTER(), 10);
@@ -27,7 +26,6 @@ public class SoftMachine {
     }
 
     public SoftMachine(String machineId) {
-        coinInventory = new HashMap<>();
         coinInventory.put(Coin.getNICKLE(), 10);
         coinInventory.put(Coin.getDIME(), 10);
         coinInventory.put(Coin.getQUARTER(), 10);
@@ -36,21 +34,29 @@ public class SoftMachine {
     }
 
     //DEALING WITH MACHINE MONEY
-    public void returnMachineCoins(double difference) {
-        do {
-            if (difference % Coin.getQUARTER() == 0) {
-                coinInventory.put(Coin.getQUARTER(), coinInventory.get(Coin.getQUARTER()) - 1);
-                difference -= Coin.getQUARTER();
-            }
-            else if (difference % Coin.getDIME() == 0) {
-                coinInventory.put(Coin.getDIME(), coinInventory.get(Coin.getDIME()) - 1);
-                difference -= Coin.getDIME();
-            }
-            else if (difference % Coin.getNICKLE() == 0) {
-                coinInventory.put(Coin.getNICKLE(), coinInventory.get(Coin.getNICKLE()) - 1);
-                difference -= Coin.getNICKLE();
-            }
-        } while (difference > 0);
+    public String returnMachineCoins(double difference) {
+        String change = String.format("Change %.2f is returned: ", difference);
+        int coinArray[] = convertCashToCoins(difference);
+        int num_quarter = coinArray[0];
+        int num_nickel = coinArray[2];
+        int num_dime = coinArray[1];
+        coinInventory.put(Coin.getQUARTER(), coinInventory.get(Coin.getQUARTER()) - num_quarter);
+        coinInventory.put(Coin.getDIME(), coinInventory.get(Coin.getDIME()) - num_dime);
+        coinInventory.put(Coin.getNICKLE(), coinInventory.get(Coin.getNICKLE()) - num_nickel);
+
+        change += "Quarter(" + num_quarter + ") Dime(" + num_dime + ") Nickel(" + num_nickel + ")";
+
+        return change;
+    }
+
+    public int[] convertCashToCoins(double money) {
+        int quarters = (int) Math.floor(money / Coin.getQUARTER());
+        money = money - quarters * Coin.getQUARTER();
+        int dimes = (int) Math.floor(money / Coin.getDIME());
+        money = money - dimes * Coin.getDIME();
+        int nickels = Math.round((float)(money / Coin.getNICKLE()));
+        int[] coinArray = {quarters, dimes, nickels};
+        return coinArray;
     }
 
     public double currentMoney(){
